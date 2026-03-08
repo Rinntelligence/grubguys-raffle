@@ -223,10 +223,9 @@
 
 <script>
 // ════════════════════════════════════════════════════════
-const ADMIN_PASSWORD  = '1234';
-const SHEET_ID        = '1-ZzTJt96RLCVSeaVfh8yexBSdPDrbM7T2wyix2wxMs4';
-const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSABXQWgBr9BcDpx5dr7HAYyP2j1qlbbrNxo9_KX1dSfzGc8mbw_9fXNJ6QFmJPbAc3vl3VVRqLPZ8_/pub?gid=0&single=true&output=csv';
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby1xHZXZ-dEBKc3CvY_wAe_eD0eXfzux3ASPzh5ABXxiHn5MkdEZVndGRABKkCM1zn4cA/exec';
+const ADMIN_PASSWORD = 'Grubguys2026';
+const SHEET_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSABXQWgBr9BcDpx5dr7HAYyP2j1qlbbrNxo9_KX1dSfzGc8mbw_9fXNJ6QFmJPbAc3vl3VVRqLPZ8_/pub?gid=0&single=true&output=csv';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby1xHZXZ-dEBKc3CvY_wAe_eD0eXfzux3ASPzh5ABXxiHn5MkdEZVndGRABKkCM1zn4cA/exec'; // same URL as in raffle.html
 // ════════════════════════════════════════════════════════
 
 const PRIZES = [
@@ -397,47 +396,49 @@ async function submitManualEntry() {
   }
 }
 
-function loadData() {
+// ── LOAD DATA FROM SHEETS ──
+async function loadData() {
+  const isConfigured = SHEET_CSV_URL && !SHEET_CSV_URL.includes('YOUR_GOOGLE');
+  if (!isConfigured) { renderDemo(); return; }
+
   document.getElementById('lastUpdated').textContent = 'Loading...';
-
-  const old = document.getElementById('_gvizScript');
-  if (old) old.remove();
-
-  window._gvizCb = function(response) {
-    try {
-      const rows = response.table.rows || [];
-      orders = rows.map(r => {
-        const c = r.c || [];
-        const v = i => (c[i] && c[i].v != null) ? String(c[i].v) : '';
-        return {
-          timestamp:    v(0),
-          name:         v(1),
-          contact_type: v(2),
-          contact:      v(3),
-          prizes:       v(4),
-          tickets:      v(5),
-          total:        parseFloat(v(6).replace(/[^0-9.]/g,'')) || 0,
-          paid:         v(7) || '⏳',
-        };
-      }).filter(o => o.name);
-      render();
-      document.getElementById('lastUpdated').textContent =
-        'Updated: ' + new Date().toLocaleTimeString('en-ZA');
-    } catch(e) {
-      console.error('Parse error:', e);
-      document.getElementById('lastUpdated').textContent = 'Error reading sheet data';
-    }
-  };
-
-  const s = document.createElement('script');
-  s.id  = '_gvizScript';
-  s.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json;responseHandler:_gvizCb&sheet=Orders&headers=1&t=${Date.now()}`;
-  s.onerror = () => {
-    document.getElementById('lastUpdated').textContent = 'Failed — make sure sheet is shared publicly (View access)';
-  };
-  document.head.appendChild(s);
+  try {
+    const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
+    const text = await res.text();
+    orders = parseCSV(text);
+    render();
+    document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleTimeString('en-ZA');
+  } catch(e) {
+    console.error(e);
+    document.getElementById('lastUpdated').textContent = 'Error — check URL';
+  }
 }
 
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) return [];
+  return lines.slice(1).map(line => {
+    // handle quoted fields with commas inside
+    const cols = [];
+    let cur = '', inQ = false;
+    for (const ch of line) {
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else cur += ch;
+    }
+    cols.push(cur.trim());
+    return {
+      timestamp:    cols[0] || '',
+      name:         cols[1] || '',
+      contact_type: cols[2] || '',
+      contact:      cols[3] || '',
+      prizes:       cols[4] || '',
+      tickets:      cols[5] || '',
+      total:        parseFloat((cols[6]||'0').replace(/[^0-9.]/g,'')) || 0,
+      paid:         cols[7] || '⏳',
+    };
+  }).filter(o => o.name);
+}
 
 function render() {
   renderStats();
