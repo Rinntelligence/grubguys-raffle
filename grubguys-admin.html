@@ -405,8 +405,20 @@ function loadData() {
       orders = rows.map(r => {
         const c = r.c || [];
         const v = i => (c[i] && c[i].v != null) ? String(c[i].v) : '';
+        // Fix gviz Date() format -> readable string
+        const vt = i => {
+          if (!c[i] || c[i].v == null) return '';
+          if (c[i].v && typeof c[i].v === 'string' && c[i].v.startsWith('Date(')) {
+            const parts = c[i].v.slice(5,-1).split(',').map(Number);
+            const d = new Date(parts[0], parts[1], parts[2], parts[3]||0, parts[4]||0);
+            return d.toLocaleString('en-ZA', {timeZone:'Africa/Johannesburg',
+              day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+          }
+          if (c[i].f) return c[i].f;
+          return String(c[i].v);
+        };
         return {
-          timestamp:    v(0),
+          timestamp:    vt(0),
           name:         v(1),
           contact_type: v(2),
           contact:      v(3),
