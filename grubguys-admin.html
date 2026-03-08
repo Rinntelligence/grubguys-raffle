@@ -227,8 +227,8 @@
 const ADMIN_PASSWORD  = '1234';
 const SHEET_ID        = '1-ZzTJt96RLCVSeaVfh8yexBSdPDrbM7T2wyix2wxMs4';
 const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSABXQWgBr9BcDpx5dr7HAYyP2j1qlbbrNxo9_KX1dSfzGc8mbw_9fXNJ6QFmJPbAc3vl3VVRqLPZ8_/pub?gid=0&single=true&output=csv';
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyehaUtvSeh-Y5x7WN22irIz4b57kYcoef8gKvd4s_UIxGf7A9s3lXMLr3BXnMj7yZ_gg/exec';
-  // ════════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby1xHZXZ-dEBKc3CvY_wAe_eD0eXfzux3ASPzh5ABXxiHn5MkdEZVndGRABKkCM1zn4cA/exec';
+// ════════════════════════════════════════════════════════
 
 const PRIZES = [
   { name: "Hotel Stay",   price: 100 },
@@ -372,32 +372,25 @@ async function submitManualEntry() {
   let ok = false;
   if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('YOUR_APPS')) {
     try {
-      const res = await fetch(APPS_SCRIPT_URL, {
+      const form = new FormData();
+      form.append('data', JSON.stringify(orderData));
+      await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
+        mode: 'no-cors',
+        body: form
       });
-      const json = await res.json();
-      ok = json.status === 'ok';
+      ok = true;
     } catch(e) { console.warn(e); }
   }
 
   btn.disabled = false;
   btn.innerHTML = 'ADD SALE →';
 
-  if (ok) {
-    document.getElementById('entrySuccess').textContent =
-      `✅ ${name} added! Tickets: ${allTicketNums.join(', ')} · Total: R${total} · ${paymentMethod.toUpperCase()}`;
-    document.getElementById('entrySuccess').classList.add('show');
-    resetEntryForm();
-    setTimeout(loadData, 1500);
-  } else {
-    // No script configured — show what would be saved
-    document.getElementById('entrySuccess').textContent =
-      `📋 Recorded locally: ${name} · ${selectedPrizes.join(', ')} · R${total} · ${paymentMethod.toUpperCase()} (connect Apps Script to save to Sheets)`;
-    document.getElementById('entrySuccess').classList.add('show');
-    resetEntryForm();
-  }
+  document.getElementById('entrySuccess').textContent =
+    `✅ ${name} added! Tickets: ${allTicketNums.join(', ')} · Total: R${total} · ${paymentMethod.toUpperCase()}`;
+  document.getElementById('entrySuccess').classList.add('show');
+  resetEntryForm();
+  setTimeout(loadData, 2000);
 }
 
 function loadData() {
