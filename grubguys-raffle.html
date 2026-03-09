@@ -390,6 +390,13 @@ async function confirmOrder() {
   confirmBtn.disabled = true;
   confirmBtn.innerHTML = '<span class="spinner"></span> OPENING PAYMENT...';
 
+  if (typeof YocoSDK === 'undefined') {
+    confirmBtn.disabled = false;
+    confirmBtn.innerHTML = 'CONFIRM ORDER';
+    alert('Payment system not loaded. Please refresh the page and try again.');
+    return;
+  }
+
   const yoco = new YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
 
   yoco.showPopup({
