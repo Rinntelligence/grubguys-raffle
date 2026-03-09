@@ -126,6 +126,7 @@
   footer p { font-family: 'Bebas Neue', sans-serif; font-size: clamp(20px,6vw,30px); color: var(--cream); letter-spacing: 5px; }
 </style>
 
+<script src="https://js.yoco.com/sdk/v1/yoco-sdk-web.js"></script>
 </head>
 <body>
 
@@ -387,43 +388,70 @@ async function confirmOrder() {
   };
 
   confirmBtn.disabled = true;
-  confirmBtn.innerHTML = '<span class="spinner"></span> CREATING PAYMENT...';
+  confirmBtn.innerHTML = '<span class="spinner"></span> OPENING PAYMENT...';
 
-  try {
-    // Step 1: Ask Apps Script to create a Yoco checkout
-    const checkoutRes = await fetch(SHEETS_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'create_checkout',
-        amountInCents: total * 100,
-        description: items.map(it => `${it.name} x${it.qty}`).join(', ')
-      })
-    });
-    const checkoutData = await checkoutRes.json();
+  // Hide checkout modal so Yoco popup appears on top
+  document.getElementById('checkoutModal').style.display = 'none';
 
-    if (!checkoutData.redirectUrl) {
-      throw new Error(checkoutData.message || 'Could not create payment');
+  const yoco = new YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
+
+  yoco.showPopup({
+    amountInCents: total * 100,
+    currency: 'ZAR',
+    name: 'Grub Guys Raffle',
+    description: items.map(it => `${it.name} x${it.qty}`).join(', '),
+    callback: async function(result) {
+      confirmBtn.disabled = false;
+      confirmBtn.innerHTML = 'CONFIRM ORDER';
+
+      if (result.error) {
+        document.getElementById('checkoutModal').style.display = 'flex';
+        if (result.error.message && result.error.message.toLowerCase().includes('cancel')) return;
+        alert('Payment failed: ' + result.error.message);
+        return;
+      }
+
+      // Payment token received — log to Sheets as paid
+      orderData.paid = '✅';
+      orderData.yoco_token = result.id;
+
+      confirmBtn.disabled = true;
+      confirmBtn.innerHTML = '<span class="spinner"></span> SAVING...';
+
+      let sheetsOk = false;
+      try {
+        const form = new FormData();
+        form.append('data', JSON.stringify(orderData));
+        await fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: form });
+        sheetsOk = true;
+      } catch(e) { console.warn('Sheets error:', e); }
+
+      confirmBtn.disabled = false;
+      confirmBtn.innerHTML = 'CONFIRM ORDER';
+
+      const ticketRows = items.map(it =>
+        `<div class="receipt-ticket-row"><span>${it.name}</span><span>${it.qty} × R${it.price} = R${it.total}</span></div>`
+      ).join('');
+      const chips = allTicketNums.map(n => `<span class="ticket-chip">${n}</span>`).join('');
+
+      document.getElementById('receiptBody').innerHTML = `
+        <div class="sheets-badge ${sheetsOk?'show':''}">&#x2705; Payment confirmed &amp; logged!</div>
+        <div class="receipt-label">BUYER</div>
+        <div class="receipt-value">${name.toUpperCase()}</div>
+        <div class="receipt-label">${contactLabel}</div>
+        <div class="receipt-value insta">${contactDisplay}</div>
+        <div class="receipt-tickets" style="margin-top:14px">${ticketRows}</div>
+        <div class="receipt-total"><span>TOTAL PAID</span><span>R${total}</span></div>
+        <div class="ticket-numbers-label">YOUR TICKET NUMBERS</div>
+        <div class="ticket-chips">${chips}</div>
+        <button class="receipt-close-btn" onclick="closeReceipt()">DONE – GOOD LUCK! 🎉</button>
+      `;
+
+      closeCheckout();
+      document.getElementById('receiptModal').classList.add('open');
+      clearCart();
     }
-
-    // Step 2: Save pending order to Sheets first
-    const form = new FormData();
-    form.append('data', JSON.stringify({ ...orderData, yoco_checkout_id: checkoutData.checkoutId }));
-    await fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: form });
-
-    // Step 3: Save order data to sessionStorage so we can show receipt after redirect
-    sessionStorage.setItem('pendingOrder', JSON.stringify({
-      orderData, items, allTicketNums, total, name, contactLabel, contactDisplay
-    }));
-
-    // Step 4: Redirect to Yoco payment page
-    window.location.href = checkoutData.redirectUrl;
-
-  } catch(err) {
-    confirmBtn.disabled = false;
-    confirmBtn.innerHTML = 'CONFIRM ORDER';
-    alert('Payment setup failed: ' + err.message);
-  }
+  });
 }
 
 // Check if returning from Yoco payment
