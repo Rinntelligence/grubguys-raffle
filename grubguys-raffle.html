@@ -125,6 +125,8 @@
   footer { background: var(--red); text-align: center; padding: 16px 20px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; border-top: 4px solid var(--dark-red); }
   footer p { font-family: 'Bebas Neue', sans-serif; font-size: clamp(20px,6vw,30px); color: var(--cream); letter-spacing: 5px; }
 </style>
+<script src="https://js.yoco.com/sdk/v1/yoco-sdk-web.js"></script>
+<script src="https://js.yoco.com/sdk/v1/yoco-sdk-web.js"></script>
 </head>
 <body>
 
@@ -240,6 +242,7 @@
 // ════════════════════════════════════════════════
 //  PASTE YOUR GOOGLE APPS SCRIPT URL HERE:
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyehaUtvSeh-Y5x7WN22irIz4b57kYcoef8gKvd4s_UIxGf7A9s3lXMLr3BXnMj7yZ_gg/exec';
+const YOCO_PUBLIC_KEY = 'pk_test_efb1213ajVgb4DV019a4'; // replace with live key when ready
 // ════════════════════════════════════════════════
 
 const prizes = [
@@ -380,51 +383,71 @@ async function confirmOrder() {
     contact: contactDisplay,
     prizes: items.map(it => `${it.name} ×${it.qty}`).join(' | '),
     tickets: allTicketNums.join(', '),
-    total: 'R' + total
+    total: 'R' + total,
+    paid: '⏳'
   };
 
-  // Show loading
   confirmBtn.disabled = true;
-  confirmBtn.innerHTML = '<span class="spinner"></span> SUBMITTING...';
+  confirmBtn.innerHTML = '<span class="spinner"></span> OPENING PAYMENT...';
 
-  let sheetsOk = false;
-  if (SHEETS_URL && !SHEETS_URL.includes('YOUR_APPS_SCRIPT')) {
-    try {
-      await fetch(SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      });
-      sheetsOk = true;
-    } catch(e) { console.warn('Sheets error:', e); }
-  }
+  const yoco = new YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
 
-  confirmBtn.disabled = false;
-  confirmBtn.innerHTML = 'CONFIRM ORDER';
+  yoco.showPopup({
+    amountInCents: total * 100,
+    currency: 'ZAR',
+    name: 'Grub Guys Raffle',
+    description: items.map(it => `${it.name} x${it.qty}`).join(', '),
+    callback: async function(result) {
+      confirmBtn.disabled = false;
+      confirmBtn.innerHTML = 'CONFIRM ORDER';
 
-  // Build receipt HTML
-  const ticketRows = items.map(it =>
-    `<div class="receipt-ticket-row"><span>${it.name}</span><span>${it.qty} × R${it.price} = R${it.total}</span></div>`
-  ).join('');
-  const chips = allTicketNums.map(n => `<span class="ticket-chip">${n}</span>`).join('');
+      if (result.error) {
+        if (result.error.message && result.error.message.toLowerCase().includes('cancel')) return;
+        alert('Payment failed: ' + result.error.message);
+        return;
+      }
 
-  document.getElementById('receiptBody').innerHTML = `
-    <div class="sheets-badge ${sheetsOk?'show':''}">✅ Logged to Google Sheets!</div>
-    <div class="receipt-label">BUYER</div>
-    <div class="receipt-value">${name.toUpperCase()}</div>
-    <div class="receipt-label">${contactLabel}</div>
-    <div class="receipt-value insta">${contactDisplay}</div>
-    <div class="receipt-tickets" style="margin-top:14px">${ticketRows}</div>
-    <div class="receipt-total"><span>TOTAL DUE</span><span>R${total}</span></div>
-    <div class="ticket-numbers-label">YOUR TICKET NUMBERS</div>
-    <div class="ticket-chips">${chips}</div>
-    <button class="receipt-close-btn" onclick="closeReceipt()">DONE – GOOD LUCK! 🎉</button>
-  `;
+      // Payment succeeded - mark paid and log to Sheets
+      orderData.paid = '✅';
+      orderData.yoco_token = result.id;
 
-  closeCheckout();
-  document.getElementById('receiptModal').classList.add('open');
-  clearCart();
+      confirmBtn.disabled = true;
+      confirmBtn.innerHTML = '<span class="spinner"></span> SAVING...';
+
+      let sheetsOk = false;
+      try {
+        const form = new FormData();
+        form.append('data', JSON.stringify(orderData));
+        await fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: form });
+        sheetsOk = true;
+      } catch(e) { console.warn('Sheets error:', e); }
+
+      confirmBtn.disabled = false;
+      confirmBtn.innerHTML = 'CONFIRM ORDER';
+
+      const ticketRows = items.map(it =>
+        `<div class="receipt-ticket-row"><span>${it.name}</span><span>${it.qty} × R${it.price} = R${it.total}</span></div>`
+      ).join('');
+      const chips = allTicketNums.map(n => `<span class="ticket-chip">${n}</span>`).join('');
+
+      document.getElementById('receiptBody').innerHTML = `
+        <div class="sheets-badge ${sheetsOk?'show':''}">&#x2705; Payment confirmed &amp; logged!</div>
+        <div class="receipt-label">BUYER</div>
+        <div class="receipt-value">${name.toUpperCase()}</div>
+        <div class="receipt-label">${contactLabel}</div>
+        <div class="receipt-value insta">${contactDisplay}</div>
+        <div class="receipt-tickets" style="margin-top:14px">${ticketRows}</div>
+        <div class="receipt-total"><span>TOTAL PAID</span><span>R${total}</span></div>
+        <div class="ticket-numbers-label">YOUR TICKET NUMBERS</div>
+        <div class="ticket-chips">${chips}</div>
+        <button class="receipt-close-btn" onclick="closeReceipt()">DONE – GOOD LUCK! 🎉</button>
+      `;
+
+      closeCheckout();
+      document.getElementById('receiptModal').classList.add('open');
+      clearCart();
+    }
+  });
 }
 
 function closeReceipt() {
