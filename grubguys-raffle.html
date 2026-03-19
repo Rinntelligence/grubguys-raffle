@@ -258,7 +258,7 @@ const prizes = [
 ];
 
 const qty = [0,0,0,0,0,0,0,0];
-let ticketCounter = parseInt(sessionStorage.getItem('ticketCounter') || '1000');
+let ticketCounter = parseInt(localStorage.getItem('ticketCounter') || '1000');
 let contactType = 'instagram';
 
 function setContact(type) {
@@ -372,7 +372,7 @@ async function confirmOrder() {
       const lt = q * prizes[i].price;
       total += lt;
       const nums = Array.from({length: q}, () => '#' + (ticketCounter++));
-      sessionStorage.setItem('ticketCounter', ticketCounter);
+      localStorage.setItem('ticketCounter', ticketCounter);
       allTicketNums.push(...nums);
       items.push({ name: prizes[i].name, qty: q, price: prizes[i].price, total: lt, tickets: nums });
     }
@@ -407,7 +407,7 @@ async function confirmOrder() {
     if (!data.redirectUrl) throw new Error(data.error || 'No redirect URL');
 
     // Save order data to sessionStorage before redirect (NOT to Sheets yet)
-    sessionStorage.setItem('pendingOrder', JSON.stringify({
+    localStorage.setItem('pendingOrder', JSON.stringify({
       orderData, items, allTicketNums, total, name, contactLabel, contactDisplay
     }));
 
@@ -425,9 +425,9 @@ async function confirmOrder() {
 function checkPaymentReturn() {
   const params = new URLSearchParams(window.location.search);
   const status = params.get('status');
-  const pending = sessionStorage.getItem('pendingOrder');
+  const pending = localStorage.getItem('pendingOrder');
   if (!status || !pending) return;
-  sessionStorage.removeItem('pendingOrder');
+  localStorage.removeItem('pendingOrder');
 
   const { orderData, items, allTicketNums, total, name, contactLabel, contactDisplay } = JSON.parse(pending);
 
@@ -466,10 +466,10 @@ window.addEventListener('load', checkPaymentReturn);
 function checkPaymentReturn() {
   const params = new URLSearchParams(window.location.search);
   const status = params.get('status');
-  const pending = sessionStorage.getItem('pendingOrder');
+  const pending = localStorage.getItem('pendingOrder');
 
   if (!status || !pending) return;
-  sessionStorage.removeItem('pendingOrder');
+  localStorage.removeItem('pendingOrder');
 
   const { orderData, items, allTicketNums, total, name, contactLabel, contactDisplay } = JSON.parse(pending);
 
