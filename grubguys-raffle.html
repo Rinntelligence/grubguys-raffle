@@ -3,270 +3,250 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADMIN – GRUB GUYS RAFFLE</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<title>RAFFLE – GRUB GUYS BY SJÖ</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --red: #C8161D; --cream: #F5EFE0; --dark-red: #8B0D12; --black: #1a1a1a; --green: #2e7d32; --orange: #e65100; }
+  :root { --red: #C8161D; --cream: #F5EFE0; --dark-red: #8B0D12; --black: #1a1a1a; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #1a1a1a; font-family: 'Barlow Condensed', sans-serif; min-height: 100vh; color: var(--cream); }
+  body { background: var(--cream); font-family: 'Barlow Condensed', sans-serif; min-height: 100vh; }
 
-  /* LOGIN */
-  .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-  .login-box { background: var(--cream); border: 4px solid var(--red); border-radius: 8px; max-width: 360px; width: 100%; overflow: hidden; }
-  .login-header { background: var(--red); padding: 20px; text-align: center; }
-  .login-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--cream); letter-spacing: 4px; }
-  .login-header p { font-size: 13px; font-weight: 700; color: rgba(245,239,224,0.75); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
-  .login-body { padding: 24px; }
-  .login-label { font-weight: 700; font-size: 12px; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; display: block; }
-  .login-input { width: 100%; border: 2.5px solid var(--red); background: var(--cream); font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; padding: 10px 14px; border-radius: 4px; color: var(--black); outline: none; margin-bottom: 14px; }
-  .login-input:focus { border-color: var(--dark-red); }
-  .login-btn { width: 100%; background: var(--black); color: var(--cream); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; padding: 12px 20px 10px; cursor: pointer; border-radius: 4px; transition: background 0.15s; }
-  .login-btn:hover { background: var(--dark-red); }
-  .login-error { color: var(--red); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-align: center; margin-top: 10px; display: none; }
+  header { background: var(--cream); border-bottom: 5px solid var(--red); padding: 16px 20px 12px; }
+  .header-inner { max-width: 680px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px,14vw,76px); color: var(--red); line-height: 0.85; letter-spacing: 2px; display: flex; align-items: center; gap: 4px; }
+  .logo-dash { display: inline-block; width: 0.45em; height: 0.1em; background: var(--red); margin-bottom: 0.1em; }
+  .brand-right { text-align: right; line-height: 1.1; }
+  .brand-right .name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(22px,6vw,34px); color: var(--red); letter-spacing: 1px; display: block; }
+  .brand-right .sub { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(11px,3vw,15px); font-weight: 700; color: var(--black); letter-spacing: 3px; text-transform: uppercase; display: block; }
 
-  .dashboard { display: none; }
+  .title-bar { background: var(--red); padding: 16px 20px 12px; text-align: center; }
+  .title-bar h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px,12vw,72px); color: var(--cream); letter-spacing: 5px; line-height: 1; }
+  .title-bar p { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(13px,3.5vw,17px); color: var(--cream); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; opacity: 0.85; }
 
-  /* HEADER */
-  header { background: var(--cream); border-bottom: 4px solid var(--red); padding: 14px 20px; }
-  .header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .logo { font-family: 'Bebas Neue', sans-serif; font-size: clamp(24px,5vw,38px); color: var(--red); letter-spacing: 2px; }
-  .logo span { color: var(--black); font-size: 0.6em; }
-  .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .refresh-btn { background: var(--red); color: var(--cream); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; padding: 8px 16px 6px; cursor: pointer; border-radius: 4px; transition: background 0.15s; }
-  .refresh-btn:hover { background: var(--dark-red); }
-  .logout-btn { background: none; border: 2px solid #666; color: #666; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 2px; padding: 6px 12px 4px; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
-  .logout-btn:hover { border-color: var(--red); color: var(--red); }
-  .last-updated { font-size: 12px; font-weight: 600; color: #888; letter-spacing: 1px; }
+  .page { max-width: 680px; margin: 0 auto; padding: 20px 16px 120px; }
 
-  .main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px,8vw,42px); color: var(--cream); background: var(--red); text-align: center; letter-spacing: 4px; padding: 10px 16px 8px; border-radius: 6px 6px 0 0; margin-top: 24px; }
 
-  /* STATS */
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .stat-card { background: var(--cream); border-radius: 6px; overflow: hidden; border: 2px solid #333; }
-  .stat-card.highlight { border-color: var(--red); }
-  .stat-label { background: var(--red); font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--cream); letter-spacing: 2px; padding: 6px 14px 4px; }
-  .stat-card:not(.highlight) .stat-label { background: #2a2a2a; }
-  .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: clamp(26px,5vw,38px); color: var(--black); padding: 10px 14px 8px; letter-spacing: 1px; line-height: 1; }
-  .stat-value.green { color: var(--green); }
-  .stat-value.orange { color: var(--orange); }
+  .prizes-box { border: 3px solid var(--red); border-top: none; border-radius: 0 0 6px 6px; overflow: hidden; margin-bottom: 24px; }
+  .prize-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 2px solid var(--red); gap: 10px; background: var(--cream); transition: background 0.15s; }
+  .prize-row:last-child { border-bottom: none; }
+  .prize-row:hover { background: #ede8d5; }
+  .prize-info { flex: 1; min-width: 0; }
+  .prize-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(20px,5vw,28px); color: var(--black); letter-spacing: 1.5px; line-height: 1; }
+  .prize-price { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(12px,3vw,15px); font-weight: 700; color: var(--red); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+  .prize-desc { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(11px,2.5vw,13px); font-weight: 600; color: #888; letter-spacing: 1px; margin-top: 1px; }
+  .prize-value { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(11px,2.5vw,13px); font-weight: 700; color: var(--black); letter-spacing: 1px; margin-top: 1px; }
+  .prize-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .price-tag { font-family: 'Bebas Neue', sans-serif; font-size: clamp(22px,6vw,30px); color: var(--red); letter-spacing: 1px; min-width: 50px; text-align: right; }
+  .qty-control { display: flex; align-items: center; border: 2.5px solid var(--red); border-radius: 4px; overflow: hidden; }
+  .qty-btn { background: var(--red); color: var(--cream); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 22px; width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.1s; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .qty-btn:hover { background: var(--dark-red); }
+  .qty-btn:active { transform: scale(0.95); }
+  .qty-num { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--black); width: 38px; text-align: center; background: var(--cream); }
 
-  /* SECTION HEAD */
-  .section-head { font-family: 'Bebas Neue', sans-serif; font-size: clamp(20px,4vw,28px); color: var(--cream); background: var(--red); letter-spacing: 3px; padding: 8px 16px 6px; border-radius: 6px 6px 0 0; margin-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+  .cart-section-header { display: flex; align-items: stretch; justify-content: space-between; margin-top: 24px; }
+  .cart-box { border: 3px solid var(--red); border-top: none; border-radius: 0 0 6px 6px; background: var(--cream); overflow: hidden; }
+  .cart-empty { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 16px; color: #999; letter-spacing: 2px; text-transform: uppercase; text-align: center; padding: 20px; }
+  .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; border-bottom: 1.5px solid #ddd4ba; }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; color: var(--black); }
+  .cart-item-detail { font-size: 13px; font-weight: 600; color: #777; letter-spacing: 1px; text-transform: uppercase; }
+  .cart-item-total { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--red); }
+  .cart-total-row { background: var(--red); display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; }
+  .cart-total-label { font-family: 'Bebas Neue', sans-serif; font-size: clamp(24px,7vw,34px); color: var(--cream); letter-spacing: 3px; }
+  .cart-total-amount { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px,8vw,40px); color: var(--cream); letter-spacing: 2px; }
+  .clear-btn { background: none; border: 2px solid var(--red); color: var(--red); font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; padding: 0 14px; cursor: pointer; border-radius: 0 6px 0 0; transition: all 0.15s; display: none; border-left: none; }
+  .clear-btn:hover { background: var(--red); color: var(--cream); }
+  .clear-btn.visible { display: block; }
+  .checkout-btn { width: 100%; background: var(--black); color: var(--cream); border: none; font-family: 'Bebas Neue', sans-serif; font-size: clamp(22px,6vw,30px); letter-spacing: 4px; padding: 16px 20px 14px; cursor: pointer; margin-top: 12px; border-radius: 6px; transition: background 0.15s; display: none; }
+  .checkout-btn:hover { background: var(--dark-red); }
+  .checkout-btn.visible { display: block; }
 
-  /* PRIZE BARS */
-  .prizes-box { background: var(--cream); border: 2px solid var(--red); border-top: none; border-radius: 0 0 6px 6px; padding: 16px; }
-  .prize-bar-row { margin-bottom: 12px; }
-  .prize-bar-row:last-child { margin-bottom: 0; }
-  .prize-bar-label { display: flex; justify-content: space-between; margin-bottom: 4px; }
-  .prize-bar-name { font-family: 'Bebas Neue', sans-serif; font-size: 17px; color: var(--black); letter-spacing: 1px; }
-  .prize-bar-count { font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: var(--red); }
-  .bar-track { background: #e0d8c8; border-radius: 3px; height: 10px; overflow: hidden; }
-  .bar-fill { background: var(--red); height: 100%; border-radius: 3px; transition: width 0.6s ease; width: 0%; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--cream); border: 4px solid var(--red); border-radius: 8px; max-width: 460px; width: 100%; overflow: hidden; max-height: 92vh; overflow-y: auto; }
+  .modal-header { background: var(--red); padding: 16px 20px 12px; text-align: center; position: sticky; top: 0; z-index: 2; }
+  .modal-header h2 { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--cream); letter-spacing: 4px; }
+  .modal-header p { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; color: rgba(245,239,224,0.8); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+  .modal-body { padding: 20px; }
 
-  /* MANUAL ENTRY FORM */
-  .entry-box { background: var(--cream); border: 2px solid var(--red); border-top: none; border-radius: 0 0 6px 6px; padding: 20px; }
-  .entry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 16px; }
-  .entry-field { display: flex; flex-direction: column; gap: 5px; }
-  .entry-label { font-weight: 700; font-size: 12px; color: #666; letter-spacing: 2px; text-transform: uppercase; }
-  .entry-input, .entry-select { border: 2.5px solid var(--red); background: var(--cream); font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; padding: 9px 12px; border-radius: 4px; color: var(--black); outline: none; width: 100%; transition: border-color 0.15s; }
-  .entry-input:focus, .entry-select:focus { border-color: var(--dark-red); }
-  .entry-input.error { border-color: #e53935; }
+  .field-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; margin-top: 16px; display: block; }
+  .field-label:first-child { margin-top: 0; }
+  .modal-input { width: 100%; border: 2.5px solid var(--red); background: var(--cream); font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; padding: 10px 14px; border-radius: 4px; color: var(--black); outline: none; transition: border-color 0.15s; }
+  .modal-input:focus { border-color: var(--dark-red); box-shadow: 0 0 0 3px rgba(200,22,29,0.1); }
+  .modal-input.error { border-color: #e53935; background: #fff5f5; }
+  .input-hint { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 600; color: #999; letter-spacing: 1px; margin-top: 4px; }
 
-  /* PRIZES CHECKBOXES */
-  .prizes-check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; margin-bottom: 16px; }
-  .prize-check-item { display: flex; align-items: center; gap: 8px; background: #f0e8d8; border: 2px solid #ddd4ba; border-radius: 4px; padding: 8px 10px; cursor: pointer; transition: border-color 0.15s, background 0.15s; user-select: none; }
-  .prize-check-item:hover { border-color: var(--red); }
-  .prize-check-item.selected { border-color: var(--red); background: #fdeced; }
-  .prize-check-item input[type=checkbox] { accent-color: var(--red); width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
-  .prize-check-name { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--black); letter-spacing: 1px; line-height: 1; }
-  .prize-check-price { font-size: 12px; font-weight: 700; color: var(--red); letter-spacing: 1px; }
-  .prize-qty { width: 50px; border: 1.5px solid var(--red); border-radius: 3px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; text-align: center; padding: 3px 4px; color: var(--black); background: var(--cream); outline: none; margin-left: auto; flex-shrink: 0; }
+  .contact-toggle { display: flex; border: 2.5px solid var(--red); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+  .toggle-btn { flex: 1; background: var(--cream); color: var(--red); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; padding: 9px 10px 7px; cursor: pointer; transition: background 0.15s, color 0.15s; border-right: 2px solid var(--red); }
+  .toggle-btn:last-child { border-right: none; }
+  .toggle-btn.active { background: var(--red); color: var(--cream); }
+  .insta-wrap { display: flex; align-items: center; border: 2.5px solid var(--red); border-radius: 4px; overflow: hidden; background: var(--cream); transition: border-color 0.15s, box-shadow 0.15s; }
+  .insta-wrap:focus-within { border-color: var(--dark-red); box-shadow: 0 0 0 3px rgba(200,22,29,0.1); }
+  .insta-prefix { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--red); padding: 10px 2px 10px 14px; background: var(--cream); flex-shrink: 0; line-height: 1; }
+  .insta-wrap .modal-input { border: none; padding-left: 4px; border-radius: 0; box-shadow: none !important; }
+  .insta-wrap.error { border-color: #e53935; background: #fff5f5; }
 
-  .entry-total-row { display: flex; align-items: center; justify-content: space-between; background: var(--red); border-radius: 4px; padding: 12px 16px; margin-bottom: 14px; }
-  .entry-total-label { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--cream); letter-spacing: 2px; }
-  .entry-total-amount { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--cream); letter-spacing: 2px; }
+  .modal-summary { background: var(--red); border-radius: 4px; padding: 12px 16px; margin: 16px 0; }
+  .modal-summary-line { display: flex; justify-content: space-between; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--cream); letter-spacing: 1px; margin-bottom: 4px; }
+  .modal-summary-line:last-child { margin-bottom: 0; }
+  .modal-summary-line.total { font-size: 26px; border-top: 1.5px solid rgba(255,255,255,0.35); margin-top: 6px; padding-top: 8px; }
 
-  .entry-submit-btn { background: var(--black); color: var(--cream); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; padding: 13px 28px 11px; cursor: pointer; border-radius: 4px; transition: background 0.15s; display: flex; align-items: center; gap: 8px; }
-  .entry-submit-btn:hover { background: var(--dark-red); }
-  .entry-submit-btn:disabled { background: #aaa; cursor: not-allowed; }
-  .entry-success { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 4px; padding: 10px 16px; font-weight: 700; font-size: 15px; color: var(--green); letter-spacing: 1px; margin-top: 10px; }
-  .entry-success.show { display: block; }
-  .entry-error-msg { display: none; background: #fdecea; border: 2px solid #e53935; border-radius: 4px; padding: 10px 16px; font-weight: 700; font-size: 14px; color: #b71c1c; letter-spacing: 1px; margin-top: 10px; }
-  .entry-error-msg.show { display: block; }
+  .modal-confirm-btn { width: 100%; background: var(--black); color: var(--cream); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; padding: 14px 20px 12px; cursor: pointer; border-radius: 4px; transition: background 0.15s; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .modal-confirm-btn:hover { background: var(--dark-red); }
+  .modal-confirm-btn:disabled { background: #aaa; cursor: not-allowed; }
+  .modal-cancel-btn { width: 100%; background: none; border: 2px solid var(--black); color: var(--black); font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; padding: 10px 20px 8px; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
+  .modal-cancel-btn:hover { background: var(--black); color: var(--cream); }
 
-  /* PAYMENT METHOD TOGGLE */
-  .pay-toggle { display: flex; border: 2.5px solid var(--red); border-radius: 4px; overflow: hidden; }
-  .pay-btn { flex: 1; background: var(--cream); color: var(--red); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1.5px; padding: 9px 8px 7px; cursor: pointer; transition: all 0.15s; border-right: 2px solid var(--red); }
-  .pay-btn:last-child { border-right: none; }
-  .pay-btn.active { background: var(--red); color: var(--cream); }
-
-  /* ORDERS TABLE */
-  .table-wrap { background: var(--cream); border: 2px solid var(--red); border-top: none; border-radius: 0 0 6px 6px; overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; min-width: 600px; }
-  thead tr { background: #f0e8d8; }
-  th { font-size: 11px; font-weight: 700; color: #666; letter-spacing: 2px; text-transform: uppercase; padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--red); white-space: nowrap; }
-  td { font-size: 14px; font-weight: 600; color: var(--black); padding: 9px 12px; border-bottom: 1px solid #ddd4ba; vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tr:nth-child(even) td { background: #f8f3e8; }
-  .badge { display: inline-block; font-family: 'Bebas Neue', sans-serif; font-size: 13px; padding: 2px 8px 1px; border-radius: 3px; letter-spacing: 1px; white-space: nowrap; }
-  .badge-paid { background: #e8f5e9; color: var(--green); border: 1.5px solid var(--green); }
-  .badge-pending { background: #fff3e0; color: var(--orange); border: 1.5px solid var(--orange); }
-  .badge-cash { background: #e3f2fd; color: #1565c0; border: 1.5px solid #1565c0; }
-  .badge-card { background: #f3e5f5; color: #6a1b9a; border: 1.5px solid #6a1b9a; }
-  .badge-online { background: #e8f5e9; color: var(--green); border: 1.5px solid var(--green); }
-  .contact-val { color: var(--red); }
-  .ticket-nums { font-size: 11px; color: #888; font-weight: 600; letter-spacing: 0.5px; }
-  .empty-state { text-align: center; padding: 40px 20px; font-weight: 700; font-size: 16px; color: #aaa; letter-spacing: 2px; text-transform: uppercase; }
-  .spinner { width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* DRAW TOOL */
-  .draw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; background: var(--cream); border: 2px solid var(--red); border-top: none; border-radius: 0 0 6px 6px; padding: 16px; }
-  .draw-card { border: 2.5px solid #ddd4ba; border-radius: 6px; overflow: hidden; background: #faf5ea; }
-  .draw-card-head { background: var(--black); padding: 10px 14px 8px; display: flex; justify-content: space-between; align-items: center; }
-  .draw-prize-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--cream); letter-spacing: 2px; }
-  .draw-entry-count { font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: #aaa; letter-spacing: 1px; }
-  .draw-card-body { padding: 12px 14px; }
-  .draw-btn { width: 100%; background: var(--red); color: var(--cream); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; padding: 10px 14px 8px; cursor: pointer; border-radius: 4px; transition: background 0.15s; margin-bottom: 10px; }
-  .draw-btn:hover { background: var(--dark-red); }
-  .draw-btn:disabled { background: #aaa; cursor: not-allowed; }
-  .draw-result { display: none; background: var(--red); border-radius: 4px; padding: 12px 14px; text-align: center; }
-  .draw-result.show { display: block; }
-  .draw-winner-name { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--cream); letter-spacing: 2px; line-height: 1; }
-  .draw-winner-contact { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; color: rgba(245,239,224,0.8); letter-spacing: 1px; margin-top: 4px; }
-  .draw-winner-tickets { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: rgba(245,239,224,0.6); letter-spacing: 1px; margin-top: 3px; }
-  .draw-entries { font-size: 12px; font-weight: 600; color: #888; letter-spacing: 1px; line-height: 1.6; }
-  .draw-entry-list { list-style: none; max-height: 180px; overflow-y: auto; border: 1.5px solid #ddd4ba; border-radius: 4px; margin-bottom: 10px; }
-  .draw-entry-list li { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-bottom: 1px solid #ede8d5; font-size: 13px; font-weight: 600; color: var(--black); }
-  .draw-entry-list li:last-child { border-bottom: none; }
-  .draw-entry-list li:nth-child(even) { background: #f5f0e4; }
-  .draw-entry-tickets { font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--red); letter-spacing: 1px; }
-  .draw-entry-contact { font-size: 11px; color: #999; font-weight: 600; }
-  .drum-roll { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--cream); letter-spacing: 3px; animation: pulse 0.3s infinite alternate; }
-  @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
-  .redraw-btn { background: none; border: 1.5px solid rgba(245,239,224,0.4); color: rgba(245,239,224,0.7); font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1px; padding: 4px 10px 3px; cursor: pointer; border-radius: 3px; margin-top: 8px; transition: all 0.15s; }
-  .redraw-btn:hover { border-color: var(--cream); color: var(--cream); }
+  .receipt-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  .receipt-modal.open { display: flex; }
+  .receipt { background: var(--cream); border: 4px solid var(--red); border-radius: 8px; max-width: 420px; width: 100%; overflow: hidden; max-height: 92vh; overflow-y: auto; }
+  .receipt-header { background: var(--red); padding: 16px; text-align: center; }
+  .receipt-header h2 { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--cream); letter-spacing: 4px; }
+  .receipt-header p { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; color: rgba(245,239,224,0.8); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+  .receipt-body { padding: 18px; }
+  .receipt-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; margin-top: 14px; }
+  .receipt-label:first-child { margin-top: 0; }
+  .receipt-value { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--black); letter-spacing: 1.5px; }
+  .receipt-value.insta { color: var(--red); }
+  .receipt-tickets { margin: 14px 0; }
+  .receipt-ticket-row { display: flex; justify-content: space-between; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; padding: 7px 0; border-bottom: 1.5px dashed #ccc4a8; color: var(--black); }
+  .receipt-ticket-row:last-child { border-bottom: none; }
+  .receipt-total { background: var(--red); border-radius: 4px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin: 14px 0; }
+  .receipt-total span { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--cream); letter-spacing: 2px; }
+  .ticket-numbers-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .ticket-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .ticket-chip { background: var(--red); color: var(--cream); font-family: 'Bebas Neue', sans-serif; font-size: 16px; padding: 4px 10px 2px; border-radius: 4px; letter-spacing: 1px; }
+  .sheets-badge { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 4px; padding: 8px 14px; margin-bottom: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; color: #2e7d32; letter-spacing: 1px; text-align: center; }
+  .sheets-badge.show { display: block; }
+  .receipt-close-btn { width: 100%; background: var(--black); color: var(--cream); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; padding: 12px 20px 10px; cursor: pointer; border-radius: 4px; }
+  .receipt-close-btn:hover { background: var(--dark-red); }
+
+  footer { background: var(--red); text-align: center; padding: 16px 20px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; border-top: 4px solid var(--dark-red); }
+  footer p { font-family: 'Bebas Neue', sans-serif; font-size: clamp(20px,6vw,30px); color: var(--cream); letter-spacing: 5px; }
 </style>
+
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <div class="login-header">
-      <h1>ADMIN</h1>
-      <p>Grub Guys Raffle Dashboard</p>
+<header>
+  <div class="header-inner">
+    <div class="logo"><span class="logo-dash"></span>RAFFLE<span class="logo-dash"></span></div>
+    <div class="brand-right">
+      <span class="name">GRUB GUYS</span>
+      <span class="sub">BY SJÖ</span>
     </div>
-    <div class="login-body">
-      <label class="login-label">Password</label>
-      <input class="login-input" id="passwordInput" type="password" placeholder="Enter password..." onkeydown="if(event.key==='Enter')tryLogin()">
-      <button class="login-btn" onclick="tryLogin()">ENTER →</button>
-      <div class="login-error" id="loginError">Wrong password. Try again.</div>
+  </div>
+</header>
+
+<div class="title-bar">
+  <h1>WIN BIG</h1>
+  <p>Pick your prizes – stack your chances</p>
+</div>
+
+<div class="page">
+  <div class="section-title">PRIZES</div>
+  <div class="prizes-box">
+    <div class="prize-row">
+      <div class="prize-info"><div class="prize-name">🏨 Hotel Stay</div><div class="prize-desc">The Commodore Hotel – 1 night stay and dinner</div><div class="prize-value">Value: over R5000</div><div class="prize-price">R100 per ticket</div></div>
+      <div class="prize-controls"><span class="price-tag">R100</span><div class="qty-control"><button class="qty-btn" onclick="change(0,-1)">−</button><span class="qty-num" id="qty0">0</span><button class="qty-btn" onclick="change(0,1)">+</button></div></div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-info"><div class="prize-name">⛳ Golf Sim</div><div class="prize-desc">Golf simulator – 1 hour + plus one</div><div class="prize-value">Value: R500</div><div class="prize-price">R50 per ticket</div></div>
+      <div class="prize-controls"><span class="price-tag">R50</span><div class="qty-control"><button class="qty-btn" onclick="change(1,-1)">−</button><span class="qty-num" id="qty1">0</span><button class="qty-btn" onclick="change(1,1)">+</button></div></div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-info"><div class="prize-name">⚓ Sea Land</div><div class="prize-desc">Sealand duffle bag</div><div class="prize-value">Value: over R3500</div><div class="prize-price">R60 per ticket</div></div>
+      <div class="prize-controls"><span class="price-tag">R60</span><div class="qty-control"><button class="qty-btn" onclick="change(2,-1)">−</button><span class="qty-num" id="qty2">0</span><button class="qty-btn" onclick="change(2,1)">+</button></div></div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-info"><div class="prize-name">🌊 Chaos &amp; Calm</div><div class="prize-desc">Chaos &amp; Calm – men's clothing voucher</div><div class="prize-value">Value: R1500</div><div class="prize-price">R30 per ticket</div></div>
+      <div class="prize-controls"><span class="price-tag">R30</span><div class="qty-control"><button class="qty-btn" onclick="change(3,-1)">−</button><span class="qty-num" id="qty3">0</span><button class="qty-btn" onclick="change(3,1)">+</button></div></div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-info"><div class="prize-name">🚗 BMW</div><div class="prize-desc">BMW merchandise</div><div class="prize-value">Value: over R1500</div><div class="prize-price">R50 per ticket</div></div>
+      <div class="prize-controls"><span class="price-tag">R50</span><div class="qty-control"><button class="qty-btn" onclick="change(4,-1)">−</button><span class="qty-num" id="qty4">0</span><button class="qty-btn" onclick="change(4,1)">+</button></div></div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-info"><div class="prize-name">🍫 Lindt Choc</div><div class="prize-desc">Lindt chocolate hamper</div><div class="prize-value">Value: over R1000</div><div class="prize-price">R30 per ticket</div></div>
+      <div class="prize-controls"><span class="price-tag">R30</span><div class="qty-control"><button class="qty-btn" onclick="change(5,-1)">−</button><span class="qty-num" id="qty5">0</span><button class="qty-btn" onclick="change(5,1)">+</button></div></div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-info"><div class="prize-name">🕯️ Diffuser</div><div class="prize-desc">Virtue Aroma diffuser and scent set</div><div class="prize-value">Value: over R5000</div><div class="prize-price">R100 per ticket</div></div>
+      <div class="prize-controls"><span class="price-tag">R100</span><div class="qty-control"><button class="qty-btn" onclick="change(6,-1)">−</button><span class="qty-num" id="qty6">0</span><button class="qty-btn" onclick="change(6,1)">+</button></div></div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-info"><div class="prize-name">❤️ Cardiologist</div><div class="prize-desc">Cardiologist appointment</div><div class="prize-value">Value: over R7000</div><div class="prize-price">R50 per ticket</div></div>
+      <div class="prize-controls"><span class="price-tag">R50</span><div class="qty-control"><button class="qty-btn" onclick="change(7,-1)">−</button><span class="qty-num" id="qty7">0</span><button class="qty-btn" onclick="change(7,1)">+</button></div></div>
+    </div>
+  </div>
+
+  <div class="cart-section-header">
+    <div class="section-title" style="margin-top:0;flex:1;border-radius:6px 0 0 0;">YOUR CART</div>
+    <button class="clear-btn" id="clearBtn" onclick="clearCart()">CLEAR ALL</button>
+  </div>
+  <div class="cart-box">
+    <div class="cart-empty" id="cartEmpty">NO TICKETS SELECTED YET</div>
+    <div id="cartItems"></div>
+    <div class="cart-total-row" id="cartTotalRow" style="display:none">
+      <span class="cart-total-label">TOTAL</span>
+      <span class="cart-total-amount" id="cartTotal">R0</span>
+    </div>
+  </div>
+  <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()">CHECKOUT →</button>
+</div>
+
+<footer><p>NO FORKS GIVEN.</p></footer>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>CHECKOUT</h2>
+      <p>Fill in your details to secure your tickets</p>
+    </div>
+    <div class="modal-body">
+      <label class="field-label">Your Name *</label>
+      <input class="modal-input" id="buyerName" type="text" placeholder="Full name..." maxlength="50" autocomplete="name">
+
+      <label class="field-label">Contact via *</label>
+      <div class="contact-toggle">
+        <button class="toggle-btn active" id="toggleInsta" onclick="setContact('instagram')">📸 Instagram</button>
+        <button class="toggle-btn" id="toggleWa" onclick="setContact('whatsapp')">💬 WhatsApp</button>
+      </div>
+      <div class="insta-wrap" id="instaWrap">
+        <span class="insta-prefix" id="contactPrefix">@</span>
+        <input class="modal-input" id="buyerContact" type="text" placeholder="yourhandle" maxlength="40"
+          autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+      </div>
+      <div class="input-hint" id="contactHint">We'll follow you &amp; DM you if you win 🏆</div>
+
+      <div class="modal-summary" id="modalSummary"></div>
+
+      <button class="modal-confirm-btn" id="confirmBtn" onclick="confirmOrder()">CONFIRM ORDER</button>
+      <button class="modal-cancel-btn" onclick="closeCheckout()">CANCEL</button>
     </div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div class="dashboard" id="dashboard">
-
-  <header>
-    <div class="header-inner">
-      <div class="logo">GRUB GUYS <span>RAFFLE ADMIN</span></div>
-      <div class="header-actions">
-        <span class="last-updated" id="lastUpdated">Not loaded</span>
-        <span class="last-updated" id="nextRefresh" style="color:#555"></span>
-        <button class="refresh-btn" onclick="loadData()">↻ REFRESH</button>
-        <button class="logout-btn" onclick="logout()">LOGOUT</button>
-      </div>
-    </div>
-  </header>
-
-  <div class="main">
-
-    <!-- STATS -->
-    <div class="stats-grid">
-      <div class="stat-card highlight"><div class="stat-label">TOTAL RAISED</div><div class="stat-value green" id="statTotal">–</div></div>
-      <div class="stat-card"><div class="stat-label">ORDERS</div><div class="stat-value" id="statOrders">–</div></div>
-      <div class="stat-card"><div class="stat-label">TICKETS SOLD</div><div class="stat-value" id="statTickets">–</div></div>
-      <div class="stat-card"><div class="stat-label">PAID ✅</div><div class="stat-value green" id="statPaid">–</div></div>
-      <div class="stat-card"><div class="stat-label">PENDING ⏳</div><div class="stat-value orange" id="statPending">–</div></div>
-    </div>
-
-    <!-- PRIZE POPULARITY -->
-    <div class="section-head">PRIZE POPULARITY</div>
-    <div class="prizes-box" id="prizeBars"><div class="empty-state">PRESS REFRESH TO LOAD</div></div>
-
-    <!-- MANUAL ENTRY -->
-    <div class="section-head" style="margin-top:24px">
-      ADD MANUAL SALE
-      <span style="font-size:13px;letter-spacing:1px;opacity:0.8">Cash / Card machine</span>
-    </div>
-    <div class="entry-box">
-
-      <div class="entry-grid">
-        <div class="entry-field">
-          <label class="entry-label">Customer Name *</label>
-          <input class="entry-input" id="entryName" type="text" placeholder="Full name..." maxlength="50">
-        </div>
-        <div class="entry-field">
-          <label class="entry-label">Contact (Insta / WhatsApp)</label>
-          <input class="entry-input" id="entryContact" type="text" placeholder="@handle or +27..." maxlength="40">
-        </div>
-        <div class="entry-field">
-          <label class="entry-label">Payment Method *</label>
-          <div class="pay-toggle">
-            <button class="pay-btn active" id="payCash" onclick="setPayment('cash')">💵 CASH</button>
-            <button class="pay-btn" id="payCard" onclick="setPayment('card')">💳 CARD</button>
-          </div>
-        </div>
-      </div>
-
-      <label class="entry-label" style="margin-bottom:8px;display:block">Select Prizes & Quantities *</label>
-      <div class="prizes-check-grid" id="prizeCheckGrid"></div>
-
-      <div class="entry-total-row">
-        <span class="entry-total-label">TOTAL</span>
-        <span class="entry-total-amount" id="entryTotal">R0</span>
-      </div>
-
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <button class="entry-submit-btn" id="entrySubmitBtn" onclick="submitManualEntry()">ADD SALE →</button>
-        <button onclick="resetEntryForm()" style="background:none;border:2px solid #666;color:#999;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:10px 16px 8px;cursor:pointer;border-radius:4px;">CLEAR</button>
-      </div>
-      <div class="entry-success" id="entrySuccess">✅ Sale added to Google Sheets!</div>
-      <div class="entry-error-msg" id="entryErrorMsg"></div>
-    </div>
-
-    <!-- ALL ORDERS -->
-    <div class="section-head" style="margin-top:24px">
-      ALL ORDERS
-      <span style="font-size:13px;letter-spacing:1px;opacity:0.8" id="orderCount"></span>
-    </div>
-    <div class="table-wrap">
-      <div id="ordersTable"><div class="empty-state">PRESS REFRESH TO LOAD</div></div>
-    </div>
-
-    <!-- DRAW WINNERS -->
-    <div class="section-head" style="margin-top:24px">
-      🎰 DRAW WINNERS
-      <span style="font-size:13px;letter-spacing:1px;opacity:0.8">Paid entries only</span>
-    </div>
-    <div class="draw-grid" id="drawGrid">
-      <div class="empty-state" style="grid-column:1/-1">PRESS REFRESH TO LOAD ENTRIES</div>
-    </div>
-
+<!-- RECEIPT MODAL -->
+<div class="receipt-modal" id="receiptModal">
+  <div class="receipt">
+    <div class="receipt-header"><h2>YOUR TICKETS</h2><p>Good luck! 🤞</p></div>
+    <div class="receipt-body" id="receiptBody"></div>
   </div>
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════
-const ADMIN_PASSWORD  = '1234';
-const SHEET_ID        = '1-ZzTJt96RLCVSeaVfh8yexBSdPDrbM7T2wyix2wxMs4';
-const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSABXQWgBr9BcDpx5dr7HAYyP2j1qlbbrNxo9_KX1dSfzGc8mbw_9fXNJ6QFmJPbAc3vl3VVRqLPZ8_/pub?gid=0&single=true&output=csv';
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyehaUtvSeh-Y5x7WN22irIz4b57kYcoef8gKvd4s_UIxGf7A9s3lXMLr3BXnMj7yZ_gg/exec';
-// ════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+//  PASTE YOUR GOOGLE APPS SCRIPT URL HERE:
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyehaUtvSeh-Y5x7WN22irIz4b57kYcoef8gKvd4s_UIxGf7A9s3lXMLr3BXnMj7yZ_gg/exec';
+const YOCO_PROXY_URL = 'https://yoco-proxy.vercel.app/api/checkout';
+// ════════════════════════════════════════════════
 
-const PRIZES = [
+const prizes = [
   { name: "Hotel Stay",   price: 100 },
   { name: "Golf Sim",     price: 50  },
   { name: "Sea Land",     price: 60  },
@@ -277,454 +257,260 @@ const PRIZES = [
   { name: "Cardiologist", price: 50  },
 ];
 
-let orders = [];
-let paymentMethod = 'cash';
-let ticketCounter = 2000; // admin entries start at 2000 to avoid clash with online
+const qty = [0,0,0,0,0,0,0,0];
+let ticketCounter = parseInt(localStorage.getItem('ticketCounter') || '1000');
+let contactType = 'instagram';
 
-// ── AUTH ──
-function tryLogin() {
-  if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    buildPrizeGrid();
-    loadData();
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-    document.getElementById('passwordInput').value = '';
-    document.getElementById('passwordInput').focus();
-  }
-}
-function logout() {
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('passwordInput').value = '';
+function setContact(type) {
+  contactType = type;
+  const isInsta = type === 'instagram';
+  document.getElementById('toggleInsta').classList.toggle('active', isInsta);
+  document.getElementById('toggleWa').classList.toggle('active', !isInsta);
+  document.getElementById('contactPrefix').textContent = isInsta ? '@' : '+';
+  const input = document.getElementById('buyerContact');
+  input.placeholder = isInsta ? 'yourhandle' : '27821234567';
+  input.setAttribute('inputmode', isInsta ? 'text' : 'tel');
+  document.getElementById('contactHint').textContent = isInsta
+    ? "We'll follow you & DM you if you win 🏆"
+    : "We'll WhatsApp you if you win 🏆";
+  document.getElementById('instaWrap').classList.remove('error');
+  input.value = '';
+  input.focus();
 }
 
-// ── PAYMENT TOGGLE ──
-function setPayment(type) {
-  paymentMethod = type;
-  document.getElementById('payCash').classList.toggle('active', type === 'cash');
-  document.getElementById('payCard').classList.toggle('active', type === 'card');
+function change(i, delta) {
+  qty[i] = Math.max(0, qty[i] + delta);
+  document.getElementById('qty'+i).textContent = qty[i];
+  updateCart();
 }
 
-// ── PRIZE CHECKBOX GRID ──
-function buildPrizeGrid() {
-  document.getElementById('prizeCheckGrid').innerHTML = PRIZES.map((p, i) => `
-    <label class="prize-check-item" id="prizeItem${i}">
-      <input type="checkbox" id="prizeCheck${i}" onchange="updateEntryTotal()">
-      <div style="flex:1;min-width:0">
-        <div class="prize-check-name">${p.name}</div>
-        <div class="prize-check-price">R${p.price}/ticket</div>
-      </div>
-      <input type="number" class="prize-qty" id="prizeQty${i}" value="1" min="1" max="20"
-        onchange="updateEntryTotal()" onclick="e=>e.stopPropagation()">
-    </label>
-  `).join('');
+function updateCart() {
+  const cartItems = document.getElementById('cartItems');
+  const cartEmpty = document.getElementById('cartEmpty');
+  const cartTotalRow = document.getElementById('cartTotalRow');
+  const cartTotal = document.getElementById('cartTotal');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const clearBtn = document.getElementById('clearBtn');
 
-  // clicking label toggles selected style
-  PRIZES.forEach((_, i) => {
-    document.getElementById(`prizeCheck${i}`).addEventListener('change', () => {
-      document.getElementById(`prizeItem${i}`).classList.toggle('selected',
-        document.getElementById(`prizeCheck${i}`).checked);
-      updateEntryTotal();
-    });
-  });
-}
-
-function updateEntryTotal() {
-  let total = 0;
-  PRIZES.forEach((p, i) => {
-    if (document.getElementById(`prizeCheck${i}`)?.checked) {
-      const qty = parseInt(document.getElementById(`prizeQty${i}`).value) || 1;
-      total += p.price * qty;
+  cartItems.innerHTML = '';
+  let total = 0, hasItems = false;
+  qty.forEach((q, i) => {
+    if (q > 0) {
+      hasItems = true;
+      const lt = q * prizes[i].price;
+      total += lt;
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML = `<div><div class="cart-item-name">${prizes[i].name}</div><div class="cart-item-detail">${q} ticket${q>1?'s':''} × R${prizes[i].price}</div></div><div class="cart-item-total">R${lt}</div>`;
+      cartItems.appendChild(row);
     }
   });
-  document.getElementById('entryTotal').textContent = 'R' + total;
+
+  cartEmpty.style.display = hasItems ? 'none' : 'block';
+  cartTotalRow.style.display = hasItems ? 'flex' : 'none';
+  cartTotal.textContent = 'R' + total;
+  checkoutBtn.classList.toggle('visible', hasItems);
+  clearBtn.classList.toggle('visible', hasItems);
 }
 
-function resetEntryForm() {
-  document.getElementById('entryName').value = '';
-  document.getElementById('entryContact').value = '';
-  document.getElementById('entryName').classList.remove('error');
-  PRIZES.forEach((_, i) => {
-    document.getElementById(`prizeCheck${i}`).checked = false;
-    document.getElementById(`prizeQty${i}`).value = 1;
-    document.getElementById(`prizeItem${i}`).classList.remove('selected');
+function clearCart() {
+  qty.fill(0);
+  qty.forEach((_, i) => document.getElementById('qty'+i).textContent = '0');
+  updateCart();
+}
+
+function openCheckout() {
+  let html = '', total = 0;
+  qty.forEach((q, i) => {
+    if (q > 0) {
+      const lt = q * prizes[i].price;
+      total += lt;
+      html += `<div class="modal-summary-line"><span>${prizes[i].name} ×${q}</span><span>R${lt}</span></div>`;
+    }
   });
-  setPayment('cash');
-  updateEntryTotal();
-  document.getElementById('entrySuccess').classList.remove('show');
-  document.getElementById('entryErrorMsg').classList.remove('show');
+  html += `<div class="modal-summary-line total"><span>TOTAL</span><span>R${total}</span></div>`;
+  document.getElementById('modalSummary').innerHTML = html;
+  document.getElementById('buyerName').value = '';
+  document.getElementById('buyerContact').value = '';
+  document.getElementById('buyerName').classList.remove('error');
+  document.getElementById('instaWrap').classList.remove('error');
+  contactType = 'instagram';
+  setContact('instagram');
+  document.getElementById('checkoutModal').classList.add('open');
+  setTimeout(() => document.getElementById('buyerName').focus(), 150);
 }
 
-async function submitManualEntry() {
-  const nameEl = document.getElementById('entryName');
+function closeCheckout() {
+  document.getElementById('checkoutModal').classList.remove('open');
+}
+
+async function confirmOrder() {
+  const nameEl = document.getElementById('buyerName');
+  const contactEl = document.getElementById('buyerContact');
+  const confirmBtn = document.getElementById('confirmBtn');
+
   const name = nameEl.value.trim();
-  const contact = document.getElementById('entryContact').value.trim() || '(not given)';
+  const contactRaw = contactEl.value.trim().replace(/^@+/, '');
+  const isInsta = contactType === 'instagram';
+  const contactLabel = isInsta ? 'INSTAGRAM' : 'WHATSAPP';
+  const contactDisplay = isInsta ? '@' + contactRaw : '+' + contactRaw.replace(/^\+/, '');
 
   nameEl.classList.remove('error');
-  document.getElementById('entrySuccess').classList.remove('show');
-  document.getElementById('entryErrorMsg').classList.remove('show');
+  document.getElementById('instaWrap').classList.remove('error');
 
-  if (!name) { nameEl.classList.add('error'); nameEl.focus(); return; }
+  let valid = true;
+  if (!name) { nameEl.classList.add('error'); nameEl.focus(); valid = false; }
+  if (!contactRaw) { document.getElementById('instaWrap').classList.add('error'); if(valid) contactEl.focus(); valid = false; }
+  if (!valid) return;
 
-  const selectedPrizes = [];
-  const allTicketNums = [];
   let total = 0;
+  const items = [];
+  const allTicketNums = [];
 
-  PRIZES.forEach((p, i) => {
-    if (document.getElementById(`prizeCheck${i}`)?.checked) {
-      const qty = parseInt(document.getElementById(`prizeQty${i}`).value) || 1;
-      const lt = p.price * qty;
+  qty.forEach((q, i) => {
+    if (q > 0) {
+      const lt = q * prizes[i].price;
       total += lt;
-      const nums = Array.from({length: qty}, () => 'A#' + (ticketCounter++));
+      const nums = Array.from({length: q}, () => '#' + (ticketCounter++));
+      localStorage.setItem('ticketCounter', ticketCounter);
       allTicketNums.push(...nums);
-      selectedPrizes.push(`${p.name} ×${qty}`);
+      items.push({ name: prizes[i].name, qty: q, price: prizes[i].price, total: lt, tickets: nums });
     }
   });
-
-  if (!selectedPrizes.length) {
-    const errEl = document.getElementById('entryErrorMsg');
-    errEl.textContent = '⚠️ Please select at least one prize.';
-    errEl.classList.add('show');
-    return;
-  }
-
-  const btn = document.getElementById('entrySubmitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> SAVING...';
 
   const orderData = {
     timestamp: new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' }),
     name,
-    contact_type: paymentMethod === 'cash' ? 'Cash' : 'Card',
-    contact,
-    prizes: selectedPrizes.join(' | '),
+    contact_type: contactLabel,
+    contact: contactDisplay,
+    prizes: items.map(it => `${it.name} ×${it.qty}`).join(' | '),
     tickets: allTicketNums.join(', '),
     total: 'R' + total,
-    paid: '✅'
+    paid: '⏳'
   };
 
-  let ok = false;
-  if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('YOUR_APPS')) {
-    try {
-      const form = new FormData();
-      form.append('data', JSON.stringify(orderData));
-      await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: form
-      });
-      ok = true;
-    } catch(e) { console.warn(e); }
-  }
+  confirmBtn.disabled = true;
+  confirmBtn.innerHTML = '<span class="spinner"></span> CREATING PAYMENT...';
 
-  btn.disabled = false;
-  btn.innerHTML = 'ADD SALE →';
-
-  document.getElementById('entrySuccess').textContent =
-    `✅ ${name} added! Tickets: ${allTicketNums.join(', ')} · Total: R${total} · ${paymentMethod.toUpperCase()}`;
-  document.getElementById('entrySuccess').classList.add('show');
-  resetEntryForm();
-  setTimeout(loadData, 2000);
-}
-
-function loadData() {
-  document.getElementById('lastUpdated').textContent = 'Loading...';
-
-  const old = document.getElementById('_gvizScript');
-  if (old) old.remove();
-
-  window._gvizCb = function(response) {
-    try {
-      const rows = response.table.rows || [];
-      orders = rows.map(r => {
-        const c = r.c || [];
-        const v = i => (c[i] && c[i].v != null) ? String(c[i].v) : '';
-        // Fix gviz Date() format -> readable string
-        const vt = i => {
-          if (!c[i] || c[i].v == null) return '';
-          if (c[i].v && typeof c[i].v === 'string' && c[i].v.startsWith('Date(')) {
-            const parts = c[i].v.slice(5,-1).split(',').map(Number);
-            const d = new Date(parts[0], parts[1], parts[2], parts[3]||0, parts[4]||0);
-            return d.toLocaleString('en-ZA', {timeZone:'Africa/Johannesburg',
-              day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
-          }
-          if (c[i].f) return c[i].f;
-          return String(c[i].v);
-        };
-        return {
-          timestamp:    vt(0),
-          name:         v(1),
-          contact_type: v(2),
-          contact:      v(3),
-          prizes:       v(4),
-          tickets:      v(5),
-          total:        parseFloat(v(6).replace(/[^0-9.]/g,'')) || 0,
-          paid:         v(7) || '⏳',
-        };
-      }).filter(o => o.name);
-      render();
-      document.getElementById('lastUpdated').textContent =
-        'Updated: ' + new Date().toLocaleTimeString('en-ZA');
-    } catch(e) {
-      console.error('Parse error:', e);
-      document.getElementById('lastUpdated').textContent = 'Error reading sheet data';
-    }
-  };
-
-  const s = document.createElement('script');
-  s.id  = '_gvizScript';
-  s.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json;responseHandler:_gvizCb&sheet=Orders&headers=1&t=${Date.now()}`;
-  s.onerror = () => {
-    document.getElementById('lastUpdated').textContent = 'Failed — make sure sheet is shared publicly (View access)';
-  };
-  document.head.appendChild(s);
-}
-
-
-function render() {
-  renderStats();
-  renderPrizeBars();
-  renderTable();
-  renderDrawTool();
-}
-
-function renderStats() {
-  const paid = orders.filter(o => o.paid === '✅');
-  const totalRaised = paid.reduce((s,o) => s + o.total, 0);
-  const totalTickets = orders.reduce((s,o) => s + (o.tickets ? o.tickets.split(',').filter(t=>t.trim()).length : 0), 0);
-  document.getElementById('statTotal').textContent = 'R' + totalRaised.toLocaleString();
-  document.getElementById('statOrders').textContent = orders.length;
-  document.getElementById('statTickets').textContent = totalTickets;
-  document.getElementById('statPaid').textContent = orders.filter(o => o.paid === '✅').length;
-  document.getElementById('statPending').textContent = orders.filter(o => o.paid !== '✅').length;
-  document.getElementById('orderCount').textContent = orders.length + ' entries';
-}
-
-function renderPrizeBars() {
-  const counts = PRIZES.map(p => ({
-    ...p,
-    count: orders.filter(o => o.prizes && o.prizes.includes(p.name)).length
-  }));
-  const max = Math.max(1, ...counts.map(p => p.count));
-  document.getElementById('prizeBars').innerHTML = counts.map(p => `
-    <div class="prize-bar-row">
-      <div class="prize-bar-label">
-        <span class="prize-bar-name">${p.name}</span>
-        <span class="prize-bar-count">${p.count} order${p.count!==1?'s':''} · R${p.price}/ticket</span>
-      </div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(p.count/max*100)}%"></div></div>
-    </div>`).join('');
-}
-
-function renderTable() {
-  if (!orders.length) {
-    document.getElementById('ordersTable').innerHTML = '<div class="empty-state">NO ORDERS YET</div>';
-    return;
-  }
-  const payBadge = ct => {
-    const t = (ct||'').toLowerCase();
-    if (t==='cash') return 'badge-cash';
-    if (t==='card') return 'badge-card';
-    return 'badge-online';
-  };
-  const rows = [...orders].reverse().map(o => `
-    <tr>
-      <td style="white-space:nowrap">${o.timestamp}</td>
-      <td><strong>${o.name}</strong></td>
-      <td><span class="contact-val">${o.contact}</span></td>
-      <td><span class="badge ${payBadge(o.contact_type)}">${o.contact_type||'Online'}</span></td>
-      <td>${o.prizes||'–'}</td>
-      <td class="ticket-nums">${o.tickets||'–'}</td>
-      <td><strong>R${o.total}</strong></td>
-      <td><span class="badge ${o.paid==='✅'?'badge-paid':'badge-pending'}">${o.paid==='✅'?'PAID':'PENDING'}</span></td>
-    </tr>`).join('');
-  document.getElementById('ordersTable').innerHTML = `
-    <table>
-      <thead><tr><th>Time</th><th>Name</th><th>Contact</th><th>Method</th><th>Prizes</th><th>Tickets</th><th>Total</th><th>Status</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
-}
-
-function renderDemo() {
-  orders = [
-    { timestamp:'08/03 19:32', name:'Jane Smith',  contact_type:'Instagram', contact:'@janesmith',     prizes:'Hotel Stay ×2 | BMW ×1',         tickets:'#1001, #1002, #1003',        total:250, paid:'✅' },
-    { timestamp:'08/03 19:45', name:'Mike Jones',  contact_type:'Cash',      contact:'+27821234567',   prizes:'Golf Sim ×1 | Lindt Choc ×2',     tickets:'A#2001, A#2002, A#2003',     total:110, paid:'✅' },
-    { timestamp:'08/03 20:01', name:'Sarah K',     contact_type:'Card',      contact:'@sarahk_ct',     prizes:'Diffuser ×1 | Chaos & Calm ×3',  tickets:'A#2004, A#2005, A#2006',     total:190, paid:'✅' },
-    { timestamp:'08/03 20:14', name:'Tom B',       contact_type:'WhatsApp',  contact:'@tomb',          prizes:'BMW ×2 | Hotel Stay ×1',          tickets:'#1011, #1012, #1013',        total:200, paid:'⏳' },
-  ];
-  render();
-  document.getElementById('lastUpdated').textContent = 'Demo data — connect your sheet';
-}
-
-document.getElementById('passwordInput').addEventListener('keydown', e => { if(e.key==='Enter') tryLogin(); });
-
-// ── DRAW TOOL ──
-function renderDrawTool() {
-  const paidOrders = orders.filter(o => o.paid === '✅');
-
-  if (!paidOrders.length) {
-    document.getElementById('drawGrid').innerHTML =
-      '<div class="empty-state" style="grid-column:1/-1">NO PAID ENTRIES YET</div>';
-    return;
-  }
-
-  const PRIZE_LIST = [
-    "Hotel Stay", "Golf Sim", "Sea Land", "Chaos & Calm",
-    "BMW", "Lindt Choc", "Diffuser", "Cardiologist"
-  ];
-
-  // Build entries per prize — each ticket = one entry
-  const entriesPerPrize = {};
-  PRIZE_LIST.forEach(p => entriesPerPrize[p] = []);
-
-  paidOrders.forEach(order => {
-    if (!order.prizes) return;
-    // Parse prizes like "Hotel Stay ×2 | BMW ×1"
-    order.prizes.split('|').forEach(part => {
-      const match = part.trim().match(/^(.+?)\s*[×x]\s*(\d+)$/);
-      if (!match) return;
-      const prizeName = match[1].trim();
-      const qty = parseInt(match[2]);
-      if (entriesPerPrize[prizeName] !== undefined) {
-        for (let i = 0; i < qty; i++) {
-          entriesPerPrize[prizeName].push({
-            name: order.name,
-            contact: order.contact,
-            contact_type: order.contact_type
-          });
-        }
-      }
+  try {
+    // Call Vercel proxy to create Yoco checkout
+    const res = await fetch(YOCO_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amountInCents: total * 100,
+        description: items.map(it => `${it.name} x${it.qty}`).join(', ')
+      })
     });
-  });
+    const data = await res.json();
 
-  document.getElementById('drawGrid').innerHTML = PRIZE_LIST.map(prize => {
-    const entries = entriesPerPrize[prize] || [];
-    const uniqueNames = [...new Set(entries.map(e => e.name))];
-    return `
-      <div class="draw-card" id="drawCard_${prize.replace(/[^a-z]/gi,'_')}">
-        <div class="draw-card-head">
-          <span class="draw-prize-name">${prize}</span>
-          <span class="draw-entry-count">${entries.length} ticket${entries.length!==1?'s':''} · ${uniqueNames.length} person${uniqueNames.length!==1?'s':''}</span>
-        </div>
-        <div class="draw-card-body">
-          ${entries.length === 0 ? '<div class="draw-entries" style="margin-bottom:10px">No paid entries yet</div>' : (() => {
-            // Group by person
-            const byPerson = {};
-            entries.forEach(e => {
-              if (!byPerson[e.name]) byPerson[e.name] = { ...e, count: 0 };
-              byPerson[e.name].count++;
-            });
-            const rows = Object.values(byPerson)
-              .sort((a,b) => b.count - a.count)
-              .map(p => `<li>
-                <div>
-                  <div>${p.name}</div>
-                  <div class="draw-entry-contact">${p.contact_type}: ${p.contact}</div>
-                </div>
-                <span class="draw-entry-tickets">${p.count} 🎟</span>
-              </li>`).join('');
-            return `<ul class="draw-entry-list">${rows}</ul>`;
-          })()}
-          <button class="draw-btn" onclick="drawWinner('${prize.replace(/'/g,"\'")}')">
-            🎲 DRAW WINNER
-          </button>
-          <div class="draw-result" id="drawResult_${prize.replace(/[^a-z]/gi,'_')}"></div>
-        </div>
-      </div>`;
-  }).join('');
+    if (!data.redirectUrl) throw new Error(data.error || 'No redirect URL');
+
+    // Save order data to sessionStorage before redirect (NOT to Sheets yet)
+    localStorage.setItem('pendingOrder', JSON.stringify({
+      orderData, items, allTicketNums, total, name, contactLabel, contactDisplay
+    }));
+
+    // Redirect to Yoco payment page
+    window.location.href = data.redirectUrl;
+
+  } catch(err) {
+    confirmBtn.disabled = false;
+    confirmBtn.innerHTML = 'CONFIRM ORDER';
+    alert('Payment setup failed: ' + err.message);
+  }
 }
 
-function drawWinner(prize) {
-  const paidOrders = orders.filter(o => o.paid === '✅');
-  const entries = [];
+// Check if returning from Yoco payment
+function checkPaymentReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('status');
+  const pending = localStorage.getItem('pendingOrder');
+  if (!status || !pending) return;
+  localStorage.removeItem('pendingOrder');
 
-  paidOrders.forEach(order => {
-    if (!order.prizes) return;
-    order.prizes.split('|').forEach(part => {
-      const match = part.trim().match(/^(.+?)\s*[×x]\s*(\d+)$/);
-      if (!match) return;
-      const prizeName = match[1].trim();
-      const qty = parseInt(match[2]);
-      if (prizeName === prize) {
-        for (let i = 0; i < qty; i++) {
-          entries.push({ name: order.name, contact: order.contact, contact_type: order.contact_type });
-        }
-      }
-    });
-  });
+  const { orderData, items, allTicketNums, total, name, contactLabel, contactDisplay } = JSON.parse(pending);
 
-  if (!entries.length) return;
+  if (status === 'success') {
+    orderData.paid = '✅';
+    const form = new FormData();
+    form.append('data', JSON.stringify(orderData));
+    fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: form });
 
-  const resultId = 'drawResult_' + prize.replace(/[^a-z]/gi,'_');
-  const resultEl = document.getElementById(resultId);
-  const btn = resultEl.previousElementSibling;
+    const ticketRows = items.map(it =>
+      `<div class="receipt-ticket-row"><span>${it.name}</span><span>${it.qty} × R${it.price} = R${it.total}</span></div>`
+    ).join('');
+    const chips = allTicketNums.map(n => `<span class="ticket-chip">${n}</span>`).join('');
 
-  // Drum roll animation
-  btn.disabled = true;
-  resultEl.classList.add('show');
-  resultEl.innerHTML = '<div class="drum-roll">🥁 DRAWING...</div>';
-
-  let spins = 0;
-  const maxSpins = 20;
-  const interval = setInterval(() => {
-    const random = entries[Math.floor(Math.random() * entries.length)];
-    resultEl.innerHTML = `<div class="drum-roll">${random.name.toUpperCase()}</div>`;
-    spins++;
-    if (spins >= maxSpins) {
-      clearInterval(interval);
-      // Final winner
-      const winner = entries[Math.floor(Math.random() * entries.length)];
-      const ticketCount = entries.filter(e => e.name === winner.name).length;
-      resultEl.innerHTML = `
-        <div style="font-size:28px;margin-bottom:4px">🎉</div>
-        <div class="draw-winner-name">${winner.name.toUpperCase()}</div>
-        <div class="draw-winner-contact">${winner.contact_type}: ${winner.contact}</div>
-        <div class="draw-winner-tickets">${ticketCount} ticket${ticketCount!==1?'s':''} in this draw</div>
-        <button class="redraw-btn" onclick="drawWinner('${prize.replace(/'/g,"\'")}')">↺ REDRAW</button>
-      `;
-      btn.disabled = false;
-    }
-  }, 80);
+    document.getElementById('receiptBody').innerHTML = `
+      <div class="sheets-badge show">&#x2705; Payment confirmed &amp; logged!</div>
+      <div class="receipt-label">BUYER</div>
+      <div class="receipt-value">${name.toUpperCase()}</div>
+      <div class="receipt-label">${contactLabel}</div>
+      <div class="receipt-value insta">${contactDisplay}</div>
+      <div class="receipt-tickets" style="margin-top:14px">${ticketRows}</div>
+      <div class="receipt-total"><span>TOTAL PAID</span><span>R${total}</span></div>
+      <div class="ticket-numbers-label">YOUR TICKET NUMBERS</div>
+      <div class="ticket-chips">${chips}</div>
+      <button class="receipt-close-btn" onclick="closeReceipt()">DONE – GOOD LUCK! 🎉</button>
+    `;
+    document.getElementById('receiptModal').classList.add('open');
+  } else {
+    alert('Payment was cancelled. Please try again.');
+  }
 }
 
-// Auto-refresh every 30 seconds when logged in
-let autoRefreshInterval = null;
-let countdownInterval = null;
-let secondsLeft = 30;
+window.addEventListener('load', checkPaymentReturn);
 
-function startAutoRefresh() {
-  stopAutoRefresh();
-  secondsLeft = 30;
-  countdownInterval = setInterval(() => {
-    secondsLeft--;
-    const el = document.getElementById('nextRefresh');
-    if (el) el.textContent = `↻ in ${secondsLeft}s`;
-    if (secondsLeft <= 0) secondsLeft = 30;
-  }, 1000);
-  autoRefreshInterval = setInterval(() => {
-    if (document.getElementById('dashboard').style.display !== 'none') {
-      loadData();
-      secondsLeft = 30;
-    }
-  }, 30000);
-}
-function stopAutoRefresh() {
-  if (autoRefreshInterval) { clearInterval(autoRefreshInterval); autoRefreshInterval = null; }
-  if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
-  const el = document.getElementById('nextRefresh');
-  if (el) el.textContent = '';
+// Check if returning from Yoco payment
+function checkPaymentReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('status');
+  const pending = localStorage.getItem('pendingOrder');
+
+  if (!status || !pending) return;
+  localStorage.removeItem('pendingOrder');
+
+  const { orderData, items, allTicketNums, total, name, contactLabel, contactDisplay } = JSON.parse(pending);
+
+  if (status === 'success') {
+    // Update order as paid
+    orderData.paid = '✅';
+    const form = new FormData();
+    form.append('data', JSON.stringify({ ...orderData, action: 'update_paid' }));
+    fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: form });
+
+    const ticketRows = items.map(it =>
+      `<div class="receipt-ticket-row"><span>${it.name}</span><span>${it.qty} × R${it.price} = R${it.total}</span></div>`
+    ).join('');
+    const chips = allTicketNums.map(n => `<span class="ticket-chip">${n}</span>`).join('');
+
+    document.getElementById('receiptBody').innerHTML = `
+      <div class="sheets-badge show">&#x2705; Payment confirmed &amp; logged!</div>
+      <div class="receipt-label">BUYER</div>
+      <div class="receipt-value">${name.toUpperCase()}</div>
+      <div class="receipt-label">${contactLabel}</div>
+      <div class="receipt-value insta">${contactDisplay}</div>
+      <div class="receipt-tickets" style="margin-top:14px">${ticketRows}</div>
+      <div class="receipt-total"><span>TOTAL PAID</span><span>R${total}</span></div>
+      <div class="ticket-numbers-label">YOUR TICKET NUMBERS</div>
+      <div class="ticket-chips">${chips}</div>
+      <button class="receipt-close-btn" onclick="closeReceipt()">DONE – GOOD LUCK! 🎉</button>
+    `;
+    document.getElementById('receiptModal').classList.add('open');
+  } else {
+    alert('Payment was cancelled or failed. Please try again.');
+  }
 }
 
-// Patch tryLogin and logout to start/stop auto-refresh
-const _origTryLogin = tryLogin;
-tryLogin = function() {
-  _origTryLogin();
-  if (document.getElementById('dashboard').style.display !== 'none') startAutoRefresh();
-};
-const _origLogout = logout;
-logout = function() { stopAutoRefresh(); _origLogout(); };
+window.addEventListener('load', checkPaymentReturn);
+
+function closeReceipt() {
+  document.getElementById('receiptModal').classList.remove('open');
+}
+
+document.getElementById('checkoutModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeCheckout(); });
+document.getElementById('receiptModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeReceipt(); });
 </script>
 </body>
 </html>
