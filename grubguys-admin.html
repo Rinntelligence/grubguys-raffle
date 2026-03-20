@@ -457,7 +457,16 @@ function loadData() {
           timestamp:    vt(0),
           name:         v(1),
           contact_type: v(2),
-          contact:      v(3),
+          contact:      (() => {
+            const raw = v(3);
+            const type = v(2).toLowerCase();
+            if (!raw) return '(not given)';
+            // Add @ prefix for instagram if missing
+            if (type === 'instagram' && !raw.startsWith('@')) return '@' + raw;
+            // Add + prefix for whatsapp if missing
+            if (type === 'whatsapp' && !raw.startsWith('+') && !raw.startsWith('(')) return '+' + raw;
+            return raw;
+          })(),
           prizes:       v(4),
           tickets:      v(5),
           total:        parseFloat(v(6).replace(/[^0-9.]/g,'')) || 0,
