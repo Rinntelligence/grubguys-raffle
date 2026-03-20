@@ -440,7 +440,7 @@ function loadData() {
       const rows = response.table.rows || [];
       orders = rows.map(r => {
         const c = r.c || [];
-        const v = i => (c[i] && c[i].v != null) ? String(c[i].v) : '';
+        const v = i => { if (!c[i]) return ''; if (c[i].v != null) return String(c[i].v); if (c[i].f != null) return String(c[i].f); return ''; };
         // Fix gviz Date() format -> readable string
         const vt = i => {
           if (!c[i] || c[i].v == null) return '';
